@@ -11,6 +11,9 @@ let pointMarkers = [];
 let subdivisionLayers = {};
 let barangayLayers = {};
 
+// Store CSV data globally
+let csvData = [];
+
 // Load index.json
 fetch('data/index.json')
   .then(res => res.json())
@@ -52,7 +55,7 @@ fetch('data/index.json')
       header: true,
       dynamicTyping: true,
       complete: function(results) {
-        const csvData = results.data;
+        csvData = results.data;
 
         // Create markers
         csvData.forEach(row => {
@@ -65,16 +68,23 @@ fetch('data/index.json')
               fillOpacity: 0.9
             }).bindPopup(`<strong>${row.NAP}</strong><br>${row.STREET}, ${row.SUBDIVISION}`);
 
-            marker.subdivision = row.SUBDIVISION; // attach subdivision info
-            marker.NAP = row.NAP; // attach NAP info
+            marker.subdivision = row.SUBDIVISION;
+            marker.NAP = row.NAP;
+            marker.originalLatLng = [row.LATITUDE, row.LONGITUDE];
+            marker.expanded = false;
+
+            // Click to expand overlapping points
+            marker.on('click', () => toggleExpand(marker));
+
             marker.addTo(map);
             pointMarkers.push(marker);
           }
         });
 
-        // Add filters AFTER CSV is loaded
-        addSubdivisionFilter(csvData);
-        addNAPFilter(csvData);
+        // Add filters after CSV is ready
+        addSubdivisionFilter();
+        addNAPFilter();
+        updateNAPFilter(); // fill NAP dropdown initially
       }
     });
 
@@ -82,8 +92,35 @@ fetch('data/index.json')
   .catch(err => console.error('Error loading index.json:', err));
 
 
-// ---- SUBDIVISION FILTER ----
-function addSubdivisionFilter(data) {
+// ---- CLICK TO EXPAND POINTS ----
+function toggleExpand(marker) {
+  const lat = marker.originalLatLng[0];
+  const lng = marker.originalLatLng[1];
+  const count = pointMarkers.filter(m => m.originalLatLng[0] === lat && m.originalLatLng[1] === lng).length;
+
+  if (!marker.expanded && count > 1) {
+    const offset = 0.00005;
+    pointMarkers.filter(m => m.originalLatLng[0] === lat && m.originalLatLng[1] === lng).forEach((m, i) => {
+      const angle = (i / count) * (2 * Math.PI);
+      const newLat = lat + Math.sin(angle) * offset;
+      const newLng = lng + Math.cos(angle) * offset;
+      m.setLatLng([newLat, newLng]);
+      m.setStyle({ radius: 12 });
+      m.openPopup();
+      m.expanded = true;
+    });
+  } else {
+    pointMarkers.filter(m => m.originalLatLng[0] === lat && m.originalLatLng[1] === lng).forEach(m => {
+      m.setLatLng(m.originalLatLng);
+      m.setStyle({ radius: 8 });
+      m.expanded = false;
+    });
+  }
+}
+
+
+// ---- ADD SUBDIVISION FILTER ----
+function addSubdivisionFilter() {
   const filterDiv = document.createElement('div');
   filterDiv.innerHTML = `
     <strong>Filter Points by Subdivision:</strong>
@@ -93,21 +130,19 @@ function addSubdivisionFilter(data) {
   `;
   document.querySelector('#filters').appendChild(filterDiv);
 
-  const subdivisions = [...new Set(data.map(d => d.SUBDIVISION))];
+  const subdivisions = [...new Set(csvData.map(d => d.SUBDIVISION))];
   const select = document.querySelector('#subdivision-filter');
-  subdivisions.forEach(sub => {
-    const option = document.createElement('option');
-    option.value = sub;
-    option.textContent = sub;
-    select.appendChild(option);
-  });
+  subdivisions.forEach(sub => select.appendChild(new Option(sub, sub)));
 
-  select.addEventListener('change', applyFilters);
+  select.addEventListener('change', () => {
+    applyFilters();
+    updateNAPFilter(); // update NAP dropdown based on subdivision
+  });
 }
 
 
-// ---- NAP FILTER ----
-function addNAPFilter(data) {
+// ---- ADD NAP FILTER ----
+function addNAPFilter() {
   const filterDiv = document.createElement('div');
   filterDiv.innerHTML = `
     <strong>Filter Points by NAP:</strong>
@@ -117,16 +152,28 @@ function addNAPFilter(data) {
   `;
   document.querySelector('#filters').appendChild(filterDiv);
 
-  const naps = [...new Set(data.map(d => d.NAP))].sort();
   const select = document.querySelector('#nap-filter');
-  naps.forEach(nap => {
-    const option = document.createElement('option');
-    option.value = nap;
-    option.textContent = nap;
-    select.appendChild(option);
-  });
-
   select.addEventListener('change', applyFilters);
+}
+
+
+// ---- UPDATE NAP OPTIONS BASED ON SUBDIVISION ----
+function updateNAPFilter() {
+  const subdivisionVal = document.querySelector('#subdivision-filter').value;
+  const napSelect = document.querySelector('#nap-filter');
+
+  // Clear existing options
+  napSelect.innerHTML = '';
+  napSelect.appendChild(new Option('All', 'All', true, true));
+
+  let filteredNAPs;
+  if (subdivisionVal === 'All') {
+    filteredNAPs = [...new Set(csvData.map(d => d.NAP))].sort();
+  } else {
+    filteredNAPs = [...new Set(csvData.filter(d => d.SUBDIVISION === subdivisionVal).map(d => d.NAP))].sort();
+  }
+
+  filteredNAPs.forEach(n => napSelect.appendChild(new Option(n, n)));
 }
 
 
@@ -138,13 +185,13 @@ function applyFilters() {
   pointMarkers.forEach(marker => {
     let show = true;
 
-    // Subdivision filter
-    if (subdivisionVal !== "All") {
+    // Filter by subdivision
+    if (subdivisionVal !== 'All') {
       show = marker.subdivision === subdivisionVal;
     }
 
-    // NAP filter overrides subdivision
-    if (napVal !== "All") {
+    // Filter by NAP (overrides subdivision if selected)
+    if (napVal !== 'All') {
       show = marker.NAP === napVal;
     }
 
