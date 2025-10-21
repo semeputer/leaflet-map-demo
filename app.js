@@ -4,46 +4,42 @@ const map = L.map('map').setView([14.62, 121.11], 14);
 // Base tiles
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
 
-// Store layers and markers
+// Store all point markers
+let pointMarkers = [];
+
+// Store subdivision and barangay layers
 let subdivisionLayers = {};
 let barangayLayers = {};
-let pointMarkers = [];
-let coordMap = {};
-let csvData = [];
 
-// ---- LOAD INDEX.JSON FOR SUBDIVISIONS AND BARANGAYS ----
+// Load index.json
 fetch('data/index.json')
   .then(res => res.json())
   .then(indexData => {
 
-    // --- BARANGAY LAYERS ---
+    // ---- BARANGAY LAYERS ----
     indexData.barangays.forEach(file => {
       const name = file.replace('.geojson','').replaceAll('_',' ');
       fetch(`data/${file}`).then(res => res.json()).then(data => {
         const layer = L.geoJSON(data, { style: { color:'blue', weight:2, fillOpacity:0.1 }}).addTo(map);
         barangayLayers[name] = layer;
-
         const checkbox = document.createElement('label');
         checkbox.innerHTML = `<input type="checkbox" checked> ${name}`;
         document.querySelector('#barangay-section').appendChild(checkbox);
-
         checkbox.querySelector('input').addEventListener('change', e => {
           e.target.checked ? map.addLayer(layer) : map.removeLayer(layer);
         });
       });
     });
 
-    // --- SUBDIVISION LAYERS ---
+    // ---- SUBDIVISION LAYERS ----
     indexData.subdivisions.forEach(file => {
       const name = file.replace('.geojson','').replaceAll('_',' ');
       fetch(`data/${file}`).then(res => res.json()).then(data => {
         const layer = L.geoJSON(data, { style: { color:'green', weight:1.5, fillOpacity:0.15 }}).addTo(map);
         subdivisionLayers[name] = layer;
-
         const checkbox = document.createElement('label');
         checkbox.innerHTML = `<input type="checkbox" checked> ${name}`;
         document.querySelector('#subdivision-section').appendChild(checkbox);
-
         checkbox.querySelector('input').addEventListener('change', e => {
           e.target.checked ? map.addLayer(layer) : map.removeLayer(layer);
         });
@@ -56,50 +52,27 @@ fetch('data/index.json')
       header: true,
       dynamicTyping: true,
       complete: function(results) {
-        csvData = results.data; // store for filtering
+        const csvData = results.data;
 
-        results.data.forEach(row => {
-          if (!row.LATITUDE || !row.LONGITUDE) return;
+        // Create markers
+        csvData.forEach(row => {
+          if (row.LATITUDE && row.LONGITUDE) {
+            const marker = L.circleMarker([row.LATITUDE, row.LONGITUDE], {
+              radius: 8,
+              fillColor: 'red',
+              color: '#fff',
+              weight: 1,
+              fillOpacity: 0.9
+            }).bindPopup(`<strong>${row.NAP}</strong><br>${row.STREET}, ${row.SUBDIVISION}`);
 
-          const key = `${row.LATITUDE},${row.LONGITUDE}`;
-          if (!coordMap[key]) coordMap[key] = [];
-          coordMap[key].push(row.NAP);
+            marker.subdivision = row.SUBDIVISION; // attach subdivision info
+            marker.NAP = row.NAP; // attach NAP info
+            marker.addTo(map);
+            pointMarkers.push(marker);
+          }
         });
 
-        // Create markers from grouped coordinates
-        for (const key in coordMap) {
-          const [lat, lng] = key.split(',').map(Number);
-          const naps = coordMap[key];
-
-          // Get all subdivisions for these NAPs
-          const subdivs = csvData.filter(d => naps.includes(d.NAP)).map(d => d.SUBDIVISION);
-
-          const marker = L.circleMarker([lat, lng], {
-            radius: 8,
-            fillColor: 'red',
-            color: '#fff',
-            weight: 1,
-            fillOpacity: 0.9
-          }).addTo(map);
-
-          marker.naps = naps;
-          marker.napsSubdivisions = [...new Set(subdivs)];
-          marker.originalLatLng = [lat, lng];
-          marker.expanded = false;
-
-          // Bind initial popup
-          if (naps.length === 1) {
-            marker.bindPopup(`NAP: ${naps[0]}`);
-          } else {
-            marker.bindPopup(`Click to expand ${naps.length} NAPs`);
-          }
-
-          // Click to expand/collapse
-          marker.on('click', () => toggleExpand(marker));
-          pointMarkers.push(marker);
-        }
-
-        // Add filters
+        // Add filters AFTER CSV is loaded
         addSubdivisionFilter(csvData);
         addNAPFilter(csvData);
       }
@@ -107,36 +80,6 @@ fetch('data/index.json')
 
   })
   .catch(err => console.error('Error loading index.json:', err));
-
-
-// ---- EXPAND / COLLAPSE FUNCTION ----
-function toggleExpand(marker) {
-  const lat = marker.originalLatLng[0];
-  const lng = marker.originalLatLng[1];
-  const count = marker.naps.length;
-
-  if (!marker.expanded && count > 1) {
-    // Expand: spread overlapping points
-    const offset = 0.00005;
-    marker.naps.forEach((nap, i) => {
-      const angle = (i / count) * (2 * Math.PI);
-      const newLat = lat + Math.sin(angle) * offset;
-      const newLng = lng + Math.cos(angle) * offset;
-
-      marker.setLatLng([newLat, newLng]);
-      marker.setStyle({ radius: 12 });
-      marker.bindPopup(`NAP: ${nap}`).openPopup();
-    });
-    marker.expanded = true;
-  } else {
-    // Collapse
-    marker.setLatLng(marker.originalLatLng);
-    marker.setStyle({ radius: 8 });
-    marker.bindPopup(count === 1 ? `NAP: ${marker.naps[0]}` : `Click to expand ${count} NAPs`);
-    marker.expanded = false;
-    marker.openPopup();
-  }
-}
 
 
 // ---- SUBDIVISION FILTER ----
@@ -159,7 +102,7 @@ function addSubdivisionFilter(data) {
     select.appendChild(option);
   });
 
-  select.addEventListener('change', () => applyFilters());
+  select.addEventListener('change', applyFilters);
 }
 
 
@@ -176,14 +119,14 @@ function addNAPFilter(data) {
 
   const naps = [...new Set(data.map(d => d.NAP))].sort();
   const select = document.querySelector('#nap-filter');
-  naps.forEach(n => {
+  naps.forEach(nap => {
     const option = document.createElement('option');
-    option.value = n;
-    option.textContent = n;
+    option.value = nap;
+    option.textContent = nap;
     select.appendChild(option);
   });
 
-  select.addEventListener('change', () => applyFilters());
+  select.addEventListener('change', applyFilters);
 }
 
 
@@ -193,19 +136,16 @@ function applyFilters() {
   const napVal = document.querySelector('#nap-filter').value;
 
   pointMarkers.forEach(marker => {
-    const markerSubdivision = marker.napsSubdivisions;
-    const markerNAPs = marker.naps;
-
     let show = true;
 
     // Subdivision filter
     if (subdivisionVal !== "All") {
-      show = markerSubdivision.includes(subdivisionVal);
+      show = marker.subdivision === subdivisionVal;
     }
 
-    // NAP filter (overrides subdivision filter)
+    // NAP filter overrides subdivision
     if (napVal !== "All") {
-      show = markerNAPs.includes(napVal);
+      show = marker.NAP === napVal;
     }
 
     if (show) marker.addTo(map);
