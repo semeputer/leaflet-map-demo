@@ -1,7 +1,16 @@
+// Initialize the map
+const map = L.map('map').setView([14.62, 121.11], 14);
+
+// Base map
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom: 19,
+}).addTo(map);
+
+// Load index.json
 fetch('data/index.json')
   .then(res => res.json())
   .then(indexData => {
-    // --- Barangays ---
+    // --- BARANGAY LIST ---
     indexData.barangays.forEach(file => {
       const name = file.replace('.geojson', '').replaceAll('_', ' ');
       fetch(`data/${file}`)
@@ -12,7 +21,7 @@ fetch('data/index.json')
           }).addTo(map);
 
           const checkbox = document.createElement('label');
-          checkbox.innerHTML = `<input type="checkbox" class="barangay-box" checked> ${name}`;
+          checkbox.innerHTML = `<input type="checkbox" checked> ${name}`;
           document.querySelector('#barangay-section').appendChild(checkbox);
 
           checkbox.querySelector('input').addEventListener('change', e => {
@@ -21,7 +30,7 @@ fetch('data/index.json')
         });
     });
 
-    // --- Subdivisions ---
+    // --- SUBDIVISION LIST ---
     indexData.subdivisions.forEach(file => {
       const name = file.replace('.geojson', '').replaceAll('_', ' ');
       fetch(`data/${file}`)
@@ -32,7 +41,7 @@ fetch('data/index.json')
           }).addTo(map);
 
           const checkbox = document.createElement('label');
-          checkbox.innerHTML = `<input type="checkbox" class="subdiv-box" checked> ${name}`;
+          checkbox.innerHTML = `<input type="checkbox" checked> ${name}`;
           document.querySelector('#subdivision-section').appendChild(checkbox);
 
           checkbox.querySelector('input').addEventListener('change', e => {
@@ -40,4 +49,5 @@ fetch('data/index.json')
           });
         });
     });
-  });
+  })
+  .catch(err => console.error('Error loading index.json:', err));
