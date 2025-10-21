@@ -1,38 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Leaflet Map with Filters</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
-  <link rel="stylesheet" href="css/style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subdivision Map Viewer</title>
+  
+  <!-- Leaflet CSS -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha512-xwE/Az9zrjP1JvH8nO5lH6Dpi1sqnYwYJz3s1tO4O9n8yF6d3N6tQe+fwLrVbBzjwH4a1zNf+uexB6ZJzQb1iw=="
+    crossorigin=""
+  />
+  
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: "Segoe UI", sans-serif;
+      background: #f4f6f8;
+    }
+
+    #map {
+      height: 100vh;
+      width: 100%;
+    }
+
+    /* Filter Panel */
+    #filters {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 1000;
+      background: white;
+      border-radius: 8px;
+      padding: 12px 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      max-height: 90vh;
+      overflow-y: auto;
+      width: 260px;
+    }
+
+    #filters h3 {
+      margin-top: 0;
+      font-size: 1.1em;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 4px;
+    }
+
+    #filters div strong {
+      display: block;
+      margin-top: 8px;
+      color: #333;
+    }
+
+    label {
+      display: block;
+      margin: 4px 0;
+      cursor: pointer;
+      font-size: 0.9em;
+    }
+
+    input[type="checkbox"] {
+      margin-right: 6px;
+    }
+  </style>
 </head>
+
 <body>
-  <div id="control-panel">
-    <div class="filter-group">
-      <label for="subdivision-filter"><strong>Filter:</strong> Subdivision Name</label>
-      <select id="subdivision-filter">
-        <option value="All">All</option>
-      </select>
+  <!-- Filter Panel -->
+  <div id="filters">
+    <h3>Filter</h3>
+
+    <div>
+      <strong>Barangay:</strong>
+      <div id="barangay-section"></div>
     </div>
 
-    <div class="filter-group">
-      <strong>Barangay:</strong><br>
-      <label>
-        <input type="checkbox" id="barangay-mayamot" checked> Barangay Mayamot
-      </label>
-    </div>
-
-    <div class="filter-group">
-      <strong>Subdivision:</strong><br>
-      <div id="subdivision-checkboxes"></div>
+    <div>
+      <strong>Subdivision:</strong>
+      <div id="subdivision-section"></div>
     </div>
   </div>
 
+  <!-- Map -->
   <div id="map"></div>
 
-  <!-- Libraries -->
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-  <script src="js/app.js"></script>
+  <!-- Leaflet JS -->
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha512-vMN5Yj2bRwhYfZ9x+VZVYe6I9JbO+VlbHuZVmFnqV5oZqq59EAhQIKX1jPz1LwNqSX9FczpUGVw6HCfYwS5f6Q=="
+    crossorigin="">
+  </script>
+
+  <!-- Main App -->
+  <script src="app.js"></script>
 </body>
 </html>
