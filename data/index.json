@@ -1,5 +1,5 @@
 {
-  "barangays": [],
+  "barangays": ["barangay_mayamot.geojson"],
   "subdivisions": [
     "broadway_pines_village.geojson",
     "far_east_asia_village.geojson",
