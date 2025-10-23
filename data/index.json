@@ -1,34 +1,12 @@
 {
-  "barangays": ["barangay_mayamot.geojson"],
+  "barangays": [
+    "barangay_mayamot.geojson",
+    "barangay_mambugan.geojson"
+  ],
   "subdivisions": [
-    "broadway_pines_village.geojson",
-    "far_east_asia_village.geojson",
-    "filinvest_east_homes.geojson",
-    "golden_meadows_executive_village.geojson",
-    "grand_monaco_residences.geojson",
-    "greenheight_new_town_subdivision.geojson",
     "kingsville_subdivision.geojson",
-    "la_unica_hija_phase_1_subdivision.geojson",
-    "lopezville_subdivision.geojson",
-    "lumang_bayan_executive_village.geojson",
-    "maries_village_2_phase_1.geojson",
-    "maries_village_2_phase_2.geojson",
-    "meadowood_royale_subdivision.geojson",
-    "oro_vista_royale_subdivision.geojson",
-    "patio_rosario_executive_homes.geojson",
-    "paula_salud_subdivision.geojson",
-    "pli_homes.geojson",
-    "reyes_subdivision.geojson",
-    "samsonville_executive_village.geojson",
-    "serra_monte_mansion_inside_filinvest_east_homes.geojson",
-    "st_mary_subdivision_and_compound.geojson",
-    "sumulong_townhomes_and_villarosa_townhouses.geojson",
-    "town_and_country_executive_village.geojson",
-    "vermont_park_executive_village.geojson",
-    "vermont_royale_executive_village.geojson",
-    "villa_classica_townhouses.geojson",
-    "virginia_summerville_phase_1.geojson",
-    "virginia_summerville_phase_2.geojson",
-    "virginia_summerville_phase_3.geojson"
+    "filinvest_east_homes.geojson",
+    "villa_cecilia_subdivision.geojson",
   ]
 }
+
