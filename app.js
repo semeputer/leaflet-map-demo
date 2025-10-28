@@ -66,7 +66,7 @@ fetch('data/index.json')
               color: '#fff',
               weight: 1,
               fillOpacity: 0.9
-            }).bindPopup(`<strong>${row.NAP}</strong><br>${row.STREET}, ${row.SUBDIVISION}`);
+            });
 
             marker.subdivision = row.SUBDIVISION;
             marker.NAP = row.NAP;
@@ -106,7 +106,6 @@ function toggleExpand(marker) {
       const newLng = lng + Math.cos(angle) * offset;
       m.setLatLng([newLat, newLng]);
       m.setStyle({ radius: 12 });
-      m.openPopup();
       m.expanded = true;
     });
   } else {
@@ -218,12 +217,12 @@ function searchNAP() {
   const targetMarker = pointMarkers.find(m => m.NAP && m.NAP.toUpperCase() === query);
 
   if (targetMarker) {
+    // 🔍 Zoom in to the marker only (no popup)
     map.setView(targetMarker.getLatLng(), 18);
-    targetMarker.openPopup();
 
-    // Highlight briefly
-    targetMarker.setStyle({ fillColor: 'yellow' });
-    setTimeout(() => targetMarker.setStyle({ fillColor: 'red' }), 1200);
+    // 🔆 Brief highlight animation
+    targetMarker.setStyle({ fillColor: 'yellow', radius: 12 });
+    setTimeout(() => targetMarker.setStyle({ fillColor: 'red', radius: 8 }), 1200);
   } else {
     alert(`NAP "${query}" not found.`);
   }
