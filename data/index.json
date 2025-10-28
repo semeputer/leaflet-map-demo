@@ -1,35 +1,11 @@
 {
   "barangays": [
     "Barangay_Mayamot.geojson",
-    "Barangay_Mambugan.geojson",
-    "Barangay_Bagong_Nayon.geojson"
+    "Barangay_Bagong_Nayon.geojson",
+    "Barangay_Mambugan.geojson"
   ],
   "subdivisions": [
-    "kingsville_subdivision.geojson"
+    "kingsville_subdivision.geojson",
+    "filinvest_east_homes.geojson"
   ]
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
