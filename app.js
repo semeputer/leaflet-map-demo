@@ -199,3 +199,32 @@ function applyFilters() {
     else map.removeLayer(marker);
   });
 }
+
+
+// ---- SEARCH FUNCTIONALITY ----
+document.getElementById('search-btn').addEventListener('click', searchNAP);
+document.getElementById('nap-search').addEventListener('keypress', e => {
+  if (e.key === 'Enter') searchNAP();
+});
+
+function searchNAP() {
+  const query = document.getElementById('nap-search').value.trim().toUpperCase();
+
+  if (!query) {
+    alert('Please enter a NAP ID to search.');
+    return;
+  }
+
+  const targetMarker = pointMarkers.find(m => m.NAP && m.NAP.toUpperCase() === query);
+
+  if (targetMarker) {
+    map.setView(targetMarker.getLatLng(), 18);
+    targetMarker.openPopup();
+
+    // Highlight briefly
+    targetMarker.setStyle({ fillColor: 'yellow' });
+    setTimeout(() => targetMarker.setStyle({ fillColor: 'red' }), 1200);
+  } else {
+    alert(`NAP "${query}" not found.`);
+  }
+}
