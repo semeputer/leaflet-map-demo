@@ -218,7 +218,7 @@ function searchNAP() {
 
   if (targetMarker) {
     // 🔍 Zoom in to the marker only (no popup)
-    map.setView(targetMarker.getLatLng(), 18);
+    map.setView(targetMarker.getLatLng(), 19);
 
     // 🔆 Brief highlight animation
     targetMarker.setStyle({ fillColor: 'yellow', radius: 12 });
@@ -227,3 +227,4 @@ function searchNAP() {
     alert(`NAP "${query}" not found.`);
   }
 }
+
