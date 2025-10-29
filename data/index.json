@@ -2,21 +2,14 @@
   "barangays": [
     "Barangay_Mayamot.geojson",
     "Barangay_Bagong_Nayon.geojson",
-    "Barangay_Mambugan.geojson"
+    "Barangay_Mambugan.geojson",
+    "Barangay_Sta_Cruz.geojson"
   ],
   "subdivisions": [
-    "Sitio_Kamias.geojson",
-    "Sitio_Tagumpay.geojson",
-    "San_Jose_Freinademetz_Subdivision.geojson",
-    "Cogeo_Village.geojson",
-    "Sitio_Lower_Tulakin.geojson",
-    "Antipolo_Highlands_Subdivision.geojson",
-    "Sitio_Kamandag.geojson",
-    "Sitio_Taguisan.geojson",
-    "Sitio_Villa_Inares.geojson",
-    "Mahogany_Heights.geojson"
+    "Sitio_Kamias.geojson"
   ]
 }
+
 
 
 
