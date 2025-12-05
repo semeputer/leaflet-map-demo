@@ -3,16 +3,22 @@
     "Barangay_San_Isidro.geojson"
   ],
   "subdivisions": [
-"Green_Acres_Subdivision.geojson",
-"Francesca_Homes_Subdivision.geojson",
-"East_Forbes_Mansion.geojson",
-"Greenheights_Executive_Homes.geojson",
-"J&E_Subdivision.geojson",
-"Roosevelt_Park.geojson",
-"Summerfield_Marquina.geojson",
-"Genesis_Village.geojson"
+    "Green_Acres_Subdivision.geojson",
+    "Francesca_Homes_Subdivision.geojson",
+    "East_Forbes_Mansion.geojson",
+    "Greenheights_Executive_Homes.geojson",
+    "J&E_Subdivision.geojson",
+    "Roosevelt_Park.geojson",
+    "Summerfield_Marquina.geojson",
+    "Genesis_Village.geojson",
+    "Cruzidad_Compound.geojson",
+    "Golden_Mile_Subdivision.geojson",
+    "Greenheights_Executive_Homes_III.geojson",
+    "Salvador_Compound.geojson",
+    "Fin_Asia_Homes_Subdivision.geojson"
   ]
 }
+
 
 
 
