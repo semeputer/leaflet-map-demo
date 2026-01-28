@@ -3,9 +3,13 @@
     "Barangay_Dela_Paz.geojson"
   ],
   "subdivisions": [
-    "Emerald_Valley_Subdivision.geojson"
+    "Emerald_Valley_Subdivision.geojson",
+    "Natividad_Subdivision.geojson",
+    "Sonia_Subdivision.geojson",
+    "Octagon_Village_Phase_3.geojson"
   ]
 }
+
 
 
 
