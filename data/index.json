@@ -1,49 +1,12 @@
 {
   "barangays": [
-    "Barangay_San_Isidro.geojson"
+    "Barangay_Dela_Paz.geojson"
   ],
   "subdivisions": [
-    "Green_Acres_Subdivision.geojson",
-    "Francesca_Homes_Subdivision.geojson",
-    "East_Forbes_Mansion.geojson",
-    "Greenheights_Executive_Homes.geojson",
-    "J&E_Subdivision.geojson",
-    "Roosevelt_Park.geojson",
-    "Summerfield_Marquina.geojson",
-    "Genesis_Village.geojson",
-    "Cruzidad_Compound.geojson",
-    "Golden_Mile_Subdivision.geojson",
-    "Greenheights_Executive_Homes_III.geojson",
-    "Salvador_Compound.geojson",
-    "Fin_Asia_Homes_Subdivision.geojson",
-    "Adelina_Homes_Phase 1.geojson",
-    "Adelina_Homes_Phase 2.geojson",
-    "Greenheights_Executive_Village.geojson",
-    "UE_Village.geojson",
-    "Grande_Valle_Subdivision.geojson",
-    "Saint_Gregory_Village.geojson",
-    "The_Nest_Royale_Inside_Saint_Gregory_Village.geojson",
-    "Maginhawa_Pagibig_Town_3.geojson",
-    "Midtown_Subdivision.geojson",
-    "Signal_Corps_Subdivision.geojson",
-    "Cainta_Greenpark_Village.geojson",
-    "Karangalan_Village_Phase_1.geojson",
-    "Vista_Verde_Executive_Village.geojson",
-    "CVS_Homes_1.geojson",
-    "Filinvest_East_Homes_Phase_2.geojson",
-    "Tropics_3_Inside_Filinvest_East_Homes_Phase_2.geojson",
-    "Eastville_Subdivision.geojson",
-    "Oaks_Residences.geojson",
-    "FEU_Village.geojson",
-    "Filinvest_East_Homes.geojson",
-    "Mahogany_Park_2.geojson",
-    "Serra_Monte_Mansion_inside_Filinvest_East_Homes.geojson",
-    "Katarungan_Village.geojson",
-    "Sitio_Halang.geojson",
-    "Balanti.geojson",
-    "Saint_Dominic_Subdivision.geojson"
+    "Emerald_Valley_Subdivision.geojson"
   ]
 }
+
 
 
 
