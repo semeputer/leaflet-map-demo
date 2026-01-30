@@ -1,22 +1,13 @@
 {
   "barangays": [
-    "Barangay_Dela_Paz.geojson"
+    "Barangay_Manggahan.geojson"
   ],
   "subdivisions": [
-    "Emerald_Valley_Subdivision.geojson",
-    "Natividad_Subdivision.geojson",
-    "Sonia_Subdivision.geojson",
-    "Octagon_Village_Phase_3.geojson",
-    "Octagon_Subdivision.geojson",
-    "Chasons_Southville_Executive_Homes.geojson",
-    "Dreamhomes_Subdivision.geojson",
-    "Mar_Village.geojson",
-    "Bartville_Subdivision.geojson",
-    "Breezy_Subdivision.geojson",
-    "Cristina_Court.geojson",
+    "Karangalan_Village.geojson",
     "Pasig_Greenpark_Village.geojson"
   ]
 }
+
 
 
 
