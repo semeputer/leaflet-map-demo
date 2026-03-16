@@ -1,0 +1,20 @@
+{
+  "barangays": [
+    "Barangay_Sto_Nino.geojson"
+  ],
+  "subdivisions": [
+    "Mearle_Homes.geojson",
+    "San_Diego_Compound.geojson",
+    "Sunny_Square.geojson",
+    "Emerald_Village.geojson",
+    "Manotoc_Subdivision.geojson",
+    "Ilaya_Homes.geojson",
+    "SMBL_Compound.geojson",
+    "Paliparan_Subdivision.geojson",
+    "Vista_Valley_Executive_Homes.geojson",
+    "Nile_Village.geojson",
+    "Zenaida_M_Subdivition_2.geojson",
+    "Don_Abdon_Homes.geojson",
+    "Goodrich_Village.geojson"
+  ]
+}
